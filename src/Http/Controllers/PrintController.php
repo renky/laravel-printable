@@ -7,11 +7,10 @@ use Illuminate\Support\Str;
 
 class PrintController
 {
-
     public function __invoke(Request $request, $model, $id, $layout = 'default')
     {
-
         $model = 'App\\Models\\' . Str::studly(Str::singular($model));
+
         try {
             $instance = $model::find($id);
             $pdfPreview = $instance
@@ -24,6 +23,7 @@ class PrintController
             if (isset($request->html)) {
                 return $pdfPreview->asHTML();
             }
+
             return response()->file($pdfPreview->save());
         } catch (\Exception $exception) {
             dd($exception);

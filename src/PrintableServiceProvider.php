@@ -2,10 +2,9 @@
 
 namespace Orlyapps\Printable;
 
+use Orlyapps\Printable\View\Components\PrintPage;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Orlyapps\Printable\Commands\PrintableCommand;
-use Orlyapps\Printable\View\Components\PrintPage;
 
 class PrintableServiceProvider extends PackageServiceProvider
 {

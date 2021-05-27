@@ -30,7 +30,6 @@ class PrintPage extends Component
      */
     public function render()
     {
-
         return view('printable::components.print-page');
     }
 }

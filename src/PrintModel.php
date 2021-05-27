@@ -2,7 +2,6 @@
 
 namespace Orlyapps\Printable;
 
-
 use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
 use Spatie\Browsershot\Browsershot;
@@ -32,46 +31,51 @@ class PrintModel
         $reflection = new \ReflectionClass($model);
         $this->modelShortName = \Str::camel($reflection->getShortName());
         $this->user = \Auth::user();
+
         return $this;
     }
 
     public function enablePDFaCompliance($PDFA)
     {
         $this->PDFA = $PDFA;
+
         return $this;
     }
 
     public function user(\App\Models\User $user)
     {
         $this->user = $user;
+
         return $this;
     }
 
     public function layout($layout)
     {
         $this->layout = $layout;
+
         return $this;
     }
 
     public function withWatermark($watermark)
     {
         $this->watermark = $watermark;
+
         return $this;
     }
 
     public function withMeta($meta)
     {
         $this->meta = $meta;
+
         return $this;
     }
 
     public function withStationery($stationery)
     {
         $this->stationery = $stationery;
+
         return $this;
     }
-
-
 
     public function asHTML()
     {
@@ -85,7 +89,7 @@ class PrintModel
 
     public function save()
     {
-        if (!is_dir(storage_path('printable'))) {
+        if (! is_dir(storage_path('printable'))) {
             mkdir(storage_path('printable'));
         }
 
