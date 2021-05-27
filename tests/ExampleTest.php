@@ -1,6 +1,6 @@
 <?php
 
-namespace VendorName\Skeleton\Tests;
+namespace Orlyapps\Printable\Tests;
 
 class ExampleTest extends TestCase
 {

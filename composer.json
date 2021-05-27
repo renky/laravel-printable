@@ -1,24 +1,27 @@
 {
-    "name": "vendor_slug/package_slug",
-    "description": ":package_description",
+    "name": "orlyapps/laravel-printable",
+    "description": "Print models as html or pdf with stationery and watermark",
     "keywords": [
-        ":vendor_name",
+        "orlyapps",
         "laravel",
-        "package_slug"
+        "laravel-printable"
     ],
-    "homepage": "https://github.com/vendor_slug/package_slug",
+    "homepage": "https://github.com/orlyapps/laravel-printable",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Florian Strauß",
+            "email": "fs@orlyapps.de",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "^7.4",
         "spatie/laravel-package-tools": "^1.4.3",
-        "illuminate/contracts": "^8.37"
+        "illuminate/contracts": "^8.37",
+        "spatie/browsershot": "^3.29",
+        "setasign/fpdf": "1.8.*",
+        "setasign/fpdi": "^2.0"
     },
     "require-dev": {
         "brianium/paratest": "^6.2",
@@ -30,13 +33,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories"
+            "Orlyapps\\Printable\\": "src",
+            "Orlyapps\\Printable\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests"
+            "Orlyapps\\Printable\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -50,10 +53,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Orlyapps\\Printable\\PrintableServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\SkeletonFacade"
+                "Printable": "Orlyapps\\Printable\\PrintableFacade"
             }
         }
     },
