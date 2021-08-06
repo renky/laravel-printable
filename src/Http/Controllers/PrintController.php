@@ -11,7 +11,7 @@ class PrintController
     {
         $className = Str::studly(Str::singular($model));
         $class = "App\\Models\\{$className}";
-        if(!class_exists($class)) {
+        if (! class_exists($class)) {
             $class = "App\\{$className}";
         }
 
