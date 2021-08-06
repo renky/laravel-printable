@@ -42,7 +42,7 @@ class PrintModel
         return $this;
     }
 
-    public function user(\App\Models\User $user)
+    public function user($user)
     {
         $this->user = $user;
 

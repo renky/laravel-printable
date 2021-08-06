@@ -9,10 +9,14 @@ class PrintController
 {
     public function __invoke(Request $request, $model, $id, $layout = 'default')
     {
-        $model = 'App\\Models\\' . Str::studly(Str::singular($model));
+        $className = Str::studly(Str::singular($model));
+        $class = "App\\Models\\{$className}";
+        if(!class_exists($class)) {
+            $class = "App\\{$className}";
+        }
 
         try {
-            $instance = $model::find($id);
+            $instance = $class::find($id);
             $pdfPreview = $instance
                 ->print()
                 ->layout($layout)
