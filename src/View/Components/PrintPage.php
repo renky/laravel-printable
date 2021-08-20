@@ -13,14 +13,17 @@ class PrintPage extends Component
      */
     public $orientation;
 
+    public $margin;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($orientation = 'portrait')
+    public function __construct($orientation = 'portrait', $margin = null)
     {
         $this->orientation = $orientation;
+        $this->margin = $margin;
     }
 
     /**
