@@ -90,7 +90,7 @@ class PrintModel
 
     public function save()
     {
-        if (!is_dir(storage_path('printable'))) {
+        if (! is_dir(storage_path('printable'))) {
             mkdir(storage_path('printable'));
         }
 
