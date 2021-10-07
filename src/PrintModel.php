@@ -79,7 +79,8 @@ class PrintModel
 
     public function asHTML()
     {
-        $templateName = "print.{$this->modelShortName}.layout-{$this->layout}";
+        $view = $this->model->printView() ?? "print.{$this->modelShortName}.layout";
+        $templateName = "{$view}-{$this->layout}";
 
         return  (string)view($templateName, array_merge([
             $this->modelShortName => $this->model,
@@ -89,7 +90,7 @@ class PrintModel
 
     public function save()
     {
-        if (! is_dir(storage_path('printable'))) {
+        if (!is_dir(storage_path('printable'))) {
             mkdir(storage_path('printable'));
         }
 

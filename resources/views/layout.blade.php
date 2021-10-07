@@ -10,30 +10,14 @@
     <title>@yield('title')</title>
     <script src="https://unpkg.com/tailwindcss-jit-cdn"></script>
     <script type="module">
-        import tailwindcssTypography from 'https://cdn.skypack.dev/@tailwindcss/typography';
 
-        window.tailwindConfig = {
-            plugins: [
-                tailwindcssTypography,
-            ]
-            theme: {
-                extend: {
-                    screens: {
-                        print: {
-                            raw: "print"
-                        }
-                    },
-
-                }
-            }
-        };
+        {!! file_get_contents(config('printable.tailwindConfig')) !!}
 
         window.tailwindCSS.refresh();
-
     </script>
     <script type="tailwind-config">
         window.tailwindConfig
-    </script>
+     </script>
     <style>
         body {
             background-color: rgba(75, 85, 99, 1);

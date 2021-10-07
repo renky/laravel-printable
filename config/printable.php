@@ -1,5 +1,6 @@
 <?php
 
 return [
-    'middleware' => ['web', 'nova']
+    'middleware' => ['web', 'nova'],
+    'tailwindConfig' => __DIR__ . "/../resources/tailwind.config.js"
 ];

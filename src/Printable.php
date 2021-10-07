@@ -9,6 +9,11 @@ trait Printable
         return resource_path('pdf/stationery.pdf');
     }
 
+    public function printView()
+    {
+        return null;
+    }
+
     public function print()
     {
         return new PrintModel($this, $this->stationeryPdf());
