@@ -28,6 +28,7 @@ class PrintController
                 ->print()
                 ->layout($layout)
                 ->user(\Auth::user())
+                ->withNumberOfPages($request->numberOfPages ?? true)
                 ->withStationery($request->stationery ?? true)
                 ->enablePDFaCompliance($request->pdfa ?? false)
                 ->withWatermark($request->watermark ?? false);

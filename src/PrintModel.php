@@ -15,6 +15,7 @@ class PrintModel
     public $layout = 'default';
     public $watermark = false;
     public $stationery = true;
+    public $numberOfPages = true;
     public $meta = [];
 
     public $stationeryPdf = null;
@@ -38,6 +39,13 @@ class PrintModel
     public function enablePDFaCompliance($PDFA)
     {
         $this->PDFA = $PDFA;
+
+        return $this;
+    }
+
+    public function withNumberOfPages($numberOfPages)
+    {
+        $this->numberOfPages = $numberOfPages;
 
         return $this;
     }
@@ -97,17 +105,22 @@ class PrintModel
         $filename = storage_path('printable/' . uniqid(rand(), true) . '.pdf');
         $templateString = $this->asHTML();
 
-        Browsershot::html($templateString)
+        $shot = Browsershot::html($templateString)
             ->showBrowserHeaderAndFooter()
             ->hideHeader()
-            ->footerHtml((string)view('printable::header'))
             ->showBackground()
             ->emulateMedia('print')
             ->paperSize(210, 297, 'mm')
             ->margins(0, 0, 0, 0, 'mm')
             ->setOption('args', '--lang=de-DE')
-            ->noSandbox()
-            ->savePdf($filename);
+            ->noSandbox();
+
+        if ($this->numberOfPages) {
+            $shot->footerHtml((string)view('printable::header'));
+        } else {
+            $shot->hideFooter();
+        }
+        $shot->savePdf($filename);
 
         $pdf = new Fpdi();
         $pdf->setSourceFile(StreamReader::createByString(file_get_contents($this->stationeryPdf)));
