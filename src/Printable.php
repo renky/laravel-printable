@@ -2,6 +2,8 @@
 
 namespace Orlyapps\Printable;
 
+use Orlyapps\Printable\Support\StationeryResolver\StationeryResolverFactory;
+
 trait Printable
 {
     public function stationeryPdf()
@@ -16,6 +18,8 @@ trait Printable
 
     public function print()
     {
-        return new PrintModel($this, $this->stationeryPdf());
+        $resolver = StationeryResolverFactory::createForModel($this);
+        $resolver->setModel($this);
+        return new PrintModel($this, $resolver->resolve());
     }
 }
