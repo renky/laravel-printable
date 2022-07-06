@@ -92,6 +92,7 @@ class PrintModel
 
         return  (string)view($templateName, array_merge([
             $this->modelShortName => $this->model,
+            'model' => $this->model,
             'user' => $this->user,
         ], $this->meta));
     }
@@ -135,12 +136,13 @@ class PrintModel
         for ($i = 1; $i <= $pageCount; $i++) {
             $pdf->AddPage();
 
-            $pageId = $pdf->importPage($i);
-            $pdf->useTemplate($pageId);
-
             if ($this->stationery) {
                 $pdf->useTemplate($coverBackground);
             }
+            $pageId = $pdf->importPage($i);
+            $pdf->useTemplate($pageId);
+
+            
 
             // Preview Watermark
             if ($this->watermark) {
