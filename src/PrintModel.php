@@ -136,11 +136,13 @@ class PrintModel
         for ($i = 1; $i <= $pageCount; $i++) {
             $pdf->AddPage();
 
+            $pageId = $pdf->importPage($i);
+            $pdf->useTemplate($pageId);
+            
             if ($this->stationery) {
                 $pdf->useTemplate($coverBackground);
             }
-            $pageId = $pdf->importPage($i);
-            $pdf->useTemplate($pageId);
+            
 
             
 
