@@ -16,6 +16,17 @@ trait Printable
         return null;
     }
 
+
+    public function browsershot($shot)
+    {
+        return $shot;
+    }
+
+    public function lambda()
+    {
+        return false;
+    }
+
     public function print()
     {
         $resolver = StationeryResolverFactory::createForModel($this);

@@ -6,19 +6,19 @@ use setasign\Fpdi\Fpdi;
 use setasign\Fpdi\PdfParser\StreamReader;
 use Spatie\Browsershot\Browsershot;
 use Symfony\Component\Process\Process;
+use Wnx\SidecarBrowsershot\BrowsershotLambda;
 
 class PrintModel
 {
     public $user = null;
+    public $meta = [];
     public $model = null;
-    public $modelShortName = null;
     public $layout = 'default';
     public $watermark = false;
     public $stationery = true;
     public $numberOfPages = true;
-    public $meta = [];
-
     public $stationeryPdf = null;
+    public $modelShortName = null;
 
     /**
      * Enable PDF/A1-b compliance
@@ -106,8 +106,13 @@ class PrintModel
         $filename = storage_path('printable/' . uniqid(rand(), true) . '.pdf');
         $templateString = $this->asHTML();
 
-        $shot = Browsershot::html($templateString)
-            ->showBrowserHeaderAndFooter()
+        if($this->model->lambda()) {
+            $shot = BrowsershotLambda::html($templateString);
+        } else {
+            $shot = Browsershot::html($templateString);
+        }
+
+        $shot->showBrowserHeaderAndFooter()
             ->hideHeader()
             ->showBackground()
             ->emulateMedia('print')
@@ -115,6 +120,8 @@ class PrintModel
             ->margins(0, 0, 0, 0, 'mm')
             ->setOption('args', '--lang=de-DE')
             ->noSandbox();
+
+        $shot = $this->model->browsershot($shot);
 
         if ($this->numberOfPages) {
             $shot->footerHtml((string)view('printable::header'));
@@ -138,13 +145,13 @@ class PrintModel
 
             $pageId = $pdf->importPage($i);
             $pdf->useTemplate($pageId);
-            
+
             if ($this->stationery) {
                 $pdf->useTemplate($coverBackground);
             }
-            
 
-            
+
+
 
             // Preview Watermark
             if ($this->watermark) {
