@@ -16,8 +16,8 @@
         }
     ],
     "require": {
-        "php": "^7.4|^8.0|^8.1",
-        "illuminate/contracts": "^8.37 | ^9.0 | ^10.0",
+        "php": "^8.0|^8.1",
+        "illuminate/contracts": "^9.0 | ^10.0",
         "setasign/fpdf": "1.8.*",
         "setasign/fpdi": "^2.0",
         "spatie/browsershot": "^3.29",
