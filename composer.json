@@ -20,9 +20,9 @@
         "illuminate/contracts": "^9.0 | ^10.0",
         "setasign/fpdf": "1.8.*",
         "setasign/fpdi": "^2.0",
-        "spatie/browsershot": "^3.29",
+        "spatie/browsershot": "^4.0",
         "spatie/laravel-package-tools": "^1.4.3",
-        "wnx/sidecar-browsershot": "^1.9"
+        "wnx/sidecar-browsershot": "^2.3"
     },
     "require-dev": {},
     "autoload": {
