@@ -11,13 +11,21 @@ use Wnx\SidecarBrowsershot\BrowsershotLambda;
 class PrintModel
 {
     public $user = null;
+
     public $meta = [];
+
     public $model = null;
+
     public $layout = 'default';
+
     public $watermark = false;
+
     public $stationery = true;
+
     public $numberOfPages = true;
+
     public $stationeryPdf = null;
+
     public $modelShortName = null;
 
     /**
@@ -90,7 +98,7 @@ class PrintModel
         $view = $this->model->printView() ?? "print.{$this->modelShortName}.layout";
         $templateName = "{$view}-{$this->layout}";
 
-        return  (string)view($templateName, array_merge([
+        return  (string) view($templateName, array_merge([
             $this->modelShortName => $this->model,
             'model' => $this->model,
             'user' => $this->user,
@@ -103,28 +111,39 @@ class PrintModel
             mkdir(storage_path('printable'));
         }
 
-        $filename = storage_path('printable/' . uniqid(rand(), true) . '.pdf');
+        $filename = storage_path('printable/'.uniqid(rand(), true).'.pdf');
         $templateString = $this->asHTML();
 
-        if($this->model->lambda()) {
+        if ($this->model->lambda()) {
             $shot = BrowsershotLambda::html($templateString);
         } else {
             $shot = Browsershot::html($templateString);
         }
+        $header = '<p></p>';
+        try {
+            $header = (string) view('print.header');
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
 
         $shot->showBrowserHeaderAndFooter()
-            ->hideHeader()
+            ->showBrowserHeaderAndFooter()
+            ->hideFooter()
+            ->headerHtml($header)
             ->showBackground()
             ->emulateMedia('print')
             ->paperSize(210, 297, 'mm')
             ->margins(0, 0, 0, 0, 'mm')
             ->setOption('args', '--lang=de-DE')
-            ->noSandbox();
+            ->noSandbox()
+            ->waitUntilNetworkIdle(false)
+            ->delay(2000)
+            ->timeout(5);
 
         $shot = $this->model->browsershot($shot);
 
         if ($this->numberOfPages) {
-            $shot->footerHtml((string)view('printable::header'));
+            $shot->footerHtml((string) view('printable::header'));
         } else {
             $shot->hideFooter();
         }
@@ -134,24 +153,28 @@ class PrintModel
         $pdf->setSourceFile(StreamReader::createByString(file_get_contents($this->stationeryPdf)));
 
         $coverBackground = $pdf->importPage(1);
-
+        $pageBackground = null;
+        try {
+            $pageBackground = $pdf->importPage(2);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
 
         $pdf->setSourceFile(resource_path('pdf/watermark-preview.pdf'));
+
         $watermarkPage = $pdf->importPage(1);
 
         $pageCount = $pdf->setSourceFile($filename);
         for ($i = 1; $i <= $pageCount; $i++) {
             $pdf->AddPage();
+            $template = ($i === 1 || $pageBackground === null) ? $coverBackground : $pageBackground;
 
             $pageId = $pdf->importPage($i);
             $pdf->useTemplate($pageId);
 
             if ($this->stationery) {
-                $pdf->useTemplate($coverBackground);
+                $pdf->useTemplate($template);
             }
-
-
-
 
             // Preview Watermark
             if ($this->watermark) {
@@ -169,7 +192,7 @@ class PrintModel
 
         // Reines PDF von Browsershot lösen und das neue zusammengeführte PDF verwenden
         unlink($filename);
-        $filename = storage_path('printable/' . uniqid(rand(), true) . '.pdf');
+        $filename = storage_path('printable/'.uniqid(rand(), true).'.pdf');
 
         $pdf->Output('F', $filename);
 
@@ -182,7 +205,7 @@ class PrintModel
 
     protected function convertToPDFa($filename)
     {
-        $outputFile = storage_path('temp/' . uniqid(rand(), true) . '.pdf');
+        $outputFile = storage_path('temp/'.uniqid(rand(), true).'.pdf');
         $process = new Process([
             'gt',
             '-dNOSAFER',
@@ -192,8 +215,8 @@ class PrintModel
             '-sProcessColorModel=DeviceRGB',
             '-sDEVICE=pdfwrite',
             '-dPDFACompatibilityPolicy=1',
-            '-sOutputFile=' . $outputFile,
-            '-sOutputICCProfile=' . resource_path('pdf/AdobeRGB1998.icc'),
+            '-sOutputFile='.$outputFile,
+            '-sOutputICCProfile='.resource_path('pdf/AdobeRGB1998.icc'),
             '-dPDFACompatibilityPolicy=1',
             $filename,
         ]);
