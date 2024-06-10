@@ -119,17 +119,10 @@ class PrintModel
         } else {
             $shot = Browsershot::html($templateString);
         }
-        $header = '<p></p>';
-        try {
-            $header = (string) view('print.header');
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
 
         $shot->showBrowserHeaderAndFooter()
-            ->showBrowserHeaderAndFooter()
             ->hideFooter()
-            ->headerHtml($header)
+            ->hideHeader()
             ->showBackground()
             ->emulateMedia('print')
             ->paperSize(210, 297, 'mm')
@@ -143,10 +136,9 @@ class PrintModel
         $shot = $this->model->browsershot($shot);
 
         if ($this->numberOfPages) {
-            $shot->footerHtml((string) view('printable::header'));
-        } else {
-            $shot->hideFooter();
+            $shot->headerHtml('<div style="padding-top:15mm;padding-right: 15mm;color: #718096;font-size:12px;text-align:right;width:100%"><span  class="pageNumber"></span> / <span class="totalPages"></span> </div>');
         }
+
         $shot->savePdf($filename);
 
         $pdf = new Fpdi();
