@@ -131,7 +131,7 @@ class PrintModel
             ->noSandbox()
             ->waitUntilNetworkIdle(false)
             ->delay(2000)
-            ->timeout(config('printable.timeout'));
+            ->timeout(config('printable.timeout', 5));
 
         $shot = $this->model->browsershot($shot);
 
